@@ -1,0 +1,26 @@
+services:
+  bdapi:
+    image: bdapi:latest
+    build:
+      context: .
+      dockerfile: BdWebApi/Dockerfile
+    ports:
+      - "5000:80"  
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=bdDb;Database=bd_db;User Id=sa;Password=yourStrong(!)Password;
+    depends_on:
+      - bdDb
+
+  bdDb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=yourStrong(!)Password  
+    ports:
+      - "1433:1433"
+    volumes:
+      - bd_data:/var/opt/mssql 
+
+volumes:
+  bd_data:
+
